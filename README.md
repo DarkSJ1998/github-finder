@@ -1,3 +1,9 @@
+# GitHub Finder 
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/a14254e0-8428-4c92-ab87-ed64fe760e9b/deploy-status)](https://app.netlify.com/sites/githubfinder-dsj1998/deploys)
+
+Hosted on Netlify <3 - https://githubfinder-dsj1998.netlify.app/
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
