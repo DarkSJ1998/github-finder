@@ -8,6 +8,7 @@ import {
 	CLEAR_USERS,
 	GET_USER,
 	GET_REPOS,
+	CHANGE_MAINTAINER_CLASS,
 } from '../types';
 
 let githubClientId;
@@ -27,6 +28,7 @@ const GithubState = (props) => {
 		user: {},
 		repos: [],
 		loading: false,
+		maintainerClass: 'hidden',
 	};
 
 	const [state, dispatch] = useReducer(GithubReducer, initialState);
@@ -79,6 +81,25 @@ const GithubState = (props) => {
 	// Set Loading
 	const setLoading = () => dispatch({ type: SET_LOADING });
 
+	// Animate Maintainer Class
+	const animateMaintainerClass = () => {
+		let flag = true;
+		setInterval(() => {
+			if (flag) {
+				dispatch({
+					type: CHANGE_MAINTAINER_CLASS,
+					payload: 'badge-success',
+				});
+			} else {
+				dispatch({
+					type: CHANGE_MAINTAINER_CLASS,
+					payload: 'badge-info',
+				});
+			}
+			flag = !flag;
+		}, 2000);
+	};
+
 	return (
 		<GithubContext.Provider
 			value={{
@@ -86,10 +107,12 @@ const GithubState = (props) => {
 				user: state.user,
 				repos: state.repos,
 				loading: state.loading,
+				maintainerClass: state.maintainerClass,
 				searchUsers,
 				getUser,
 				getUserRepos,
 				clearUsers,
+				animateMaintainerClass: animateMaintainerClass,
 			}}
 		>
 			{props.children}

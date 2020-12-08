@@ -1,17 +1,32 @@
 import React, { Fragment, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
+
 import Spinner from '../layout/Spinner';
 import Repos from '../repos/Repos';
-import { Link } from 'react-router-dom';
 import GithubContext from '../../context/github/githubContext';
+import devInfo from '../../devInfo.json';
+
+import './User.css';
 
 const User = ({ match }) => {
 	const githubContext = useContext(GithubContext);
 
-	const { user, loading, getUser, repos, getUserRepos } = githubContext;
+	const {
+		user,
+		loading,
+		getUser,
+		repos,
+		getUserRepos,
+		maintainerClass,
+		animateMaintainerClass,
+	} = githubContext;
 
+	// Works as componentDidMount()
 	useEffect(() => {
 		getUser(match.params.login);
 		getUserRepos(match.params.login);
+		animateMaintainerClass();
+
 		// eslint-disable-next-line
 	}, []);
 
@@ -32,6 +47,23 @@ const User = ({ match }) => {
 	} = user;
 
 	if (loading) return <Spinner />;
+
+	// For the Maintainer badges
+	let showMaintainerBadge = false;
+	let maintainerBadgeText = null;
+	let maintainerBadgeTooltip = null;
+
+	if (login === devInfo.ogDeveloperId) {
+		showMaintainerBadge = true;
+		maintainerBadgeText = 'Original Developer';
+		maintainerBadgeTooltip =
+			'This web app was originally created by this user. Check the About section for more info.';
+	} else if (login === devInfo.developerId) {
+		showMaintainerBadge = true;
+		maintainerBadgeText = 'Maintainer';
+		maintainerBadgeTooltip =
+			'This web app is created by this user. Check the About section for more info.';
+	}
 
 	return (
 		<Fragment>
@@ -70,6 +102,20 @@ const User = ({ match }) => {
 							{login && (
 								<Fragment>
 									<strong>Username: </strong> {login}
+									{showMaintainerBadge ? (
+										<div
+											className={
+												'badge ' + maintainerClass
+											}
+											style={{
+												transition: '1s',
+												cursor: 'pointer',
+											}}
+											title={maintainerBadgeTooltip}
+										>
+											{maintainerBadgeText}
+										</div>
+									) : null}
 								</Fragment>
 							)}
 						</li>
